@@ -21,6 +21,7 @@ import com.example.sharedgroceryapp.databinding.FragmentGroceryListBinding
 import com.example.sharedgroceryapp.databinding.ItemGroceryBinding
 import com.example.sharedgroceryapp.ui.viewmodel.GroceryViewModel
 import com.example.sharedgroceryapp.ui.viewmodel.GroceryViewModelFactory
+import com.example.sharedgroceryapp.utils.GroceryListUtils
 import com.example.sharedgroceryapp.utils.QRCodeGenerator
 import kotlinx.coroutines.launch
 
@@ -144,9 +145,10 @@ class GroceryListFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.getItemsForList(listId).collect { items ->
-                    currentList = items
-                    adapter.submitList(items)
-                    if (items.isEmpty()) {
+                    val sortedItems = GroceryListUtils.sortItems(items)
+                    currentList = sortedItems
+                    adapter.submitList(sortedItems)
+                    if (sortedItems.isEmpty()) {
                         binding.rvGroceryList.visibility = View.GONE
                         binding.layoutEmptyState.visibility = View.VISIBLE
                     } else {
