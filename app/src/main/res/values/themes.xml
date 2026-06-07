@@ -1,8 +1,24 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.SharedGroceryApp" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Theme colors mapped to the custom Grovia palette -->
+        <item name="colorPrimary">@color/grovia_primary</item>
+        <item name="colorPrimaryDark">@color/grovia_primary_variant</item>
+        <item name="colorSecondary">@color/grovia_secondary</item>
+        
+        <item name="android:windowBackground">@color/grovia_background</item>
+        <item name="colorSurface">@color/grovia_surface</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="colorOnBackground">@color/grovia_text_primary</item>
+        <item name="colorOnSurface">@color/grovia_text_primary</item>
+        
+        <!-- Outline / divider styles -->
+        <item name="colorOutline">@color/grovia_outline</item>
+
+        <!-- Status bar and navigation bar customization -->
+        <item name="android:statusBarColor">?attr/colorPrimaryDark</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
     </style>
 
     <style name="Theme.SharedGroceryApp" parent="Base.Theme.SharedGroceryApp" />
