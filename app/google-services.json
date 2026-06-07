@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "296698837711",
+    "project_id": "sharedgroceryapp-32367",
+    "storage_bucket": "sharedgroceryapp-32367.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:296698837711:android:aa1e42dd08fca0611ed5ba",
+        "android_client_info": {
+          "package_name": "com.example.sharedgroceryapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0QJOaXNz_evD0-oLNmWeT4G5KSf3rvWQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
