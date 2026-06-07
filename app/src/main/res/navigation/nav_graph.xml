@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeListsFragment">
+
+    <fragment
+        android:id="@+id/homeListsFragment"
+        android:name="com.example.sharedgroceryapp.ui.fragments.HomeListsFragment"
+        android:label="My Shopping Lists"
+        tools:layout="@layout/fragment_home_lists">
+        <action
+            android:id="@+id/action_homeListsFragment_to_groceryListFragment"
+            app:destination="@id/groceryListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/groceryListFragment"
+        android:name="com.example.sharedgroceryapp.ui.fragments.GroceryListFragment"
+        android:label="{listTitle}"
+        tools:layout="@layout/fragment_grocery_list">
+        <argument
+            android:name="listId"
+            app:argType="integer" />
+        <argument
+            android:name="listTitle"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_groceryListFragment_to_addEditItemFragment"
+            app:destination="@id/addEditItemFragment" />
+        <action
+            android:id="@+id/action_groceryListFragment_to_qrCodeDialogFragment"
+            app:destination="@id/qrCodeDialogFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addEditItemFragment"
+        android:name="com.example.sharedgroceryapp.ui.fragments.AddEditItemFragment"
+        android:label="Grocery Item"
+        tools:layout="@layout/fragment_add_edit_item">
+        <argument
+            android:name="listId"
+            app:argType="integer" />
+        <argument
+            android:name="itemId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+        <argument
+            android:name="itemBought"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <argument
+            android:name="itemName"
+            app:argType="string"
+            android:defaultValue="@null"
+            app:nullable="true" />
+        <argument
+            android:name="itemQuantity"
+            app:argType="integer"
+            android:defaultValue="1" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/qrCodeDialogFragment"
+        android:name="com.example.sharedgroceryapp.ui.fragments.QRCodeDialogFragment"
+        android:label="Share List QR"
+        tools:layout="@layout/dialog_qr_code">
+        <argument
+            android:name="qrContent"
+            app:argType="string"
+            android:defaultValue="Empty List" />
+    </dialog>
+</navigation>

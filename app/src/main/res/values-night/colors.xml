@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark Mode Palette overrides -->
+    <color name="grovia_primary">#129479</color>
+    <color name="grovia_primary_variant">#0B6451</color>
+    <color name="grovia_secondary">#3FB399</color>
+    <color name="grovia_secondary_variant">#5D9E8F</color>
+
+    <color name="grovia_background">#121715</color>
+    <color name="grovia_surface">#1C2220</color>
+
+    <color name="grovia_text_primary">#E1E4E2</color>
+    <color name="grovia_text_secondary">#9CA3A0</color>
+    <color name="grovia_outline">#3E4542</color>
+</resources>
