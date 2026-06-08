@@ -4,19 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grovia_background">
+    android:background="@color/screen_background">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/grovia_primary">
+        android:background="@color/toolbar_background">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:title="My Shopping Lists"
-            app:titleTextColor="#FFFFFF" />
+            app:titleTextColor="@color/toolbar_content" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -25,12 +25,55 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        <!-- Summary Header Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardSummaryHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:cardBackgroundColor="?attr/colorPrimaryContainer"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="12dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_cart"
+                    app:tint="?attr/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/tvSummaryStats"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="0 lists • 0 items total"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvShoppingLists"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:clipToPadding="false"
             android:paddingBottom="88dp"
+            app:layout_constraintTop_toBottomOf="@id/cardSummaryHeader"
+            app:layout_constraintBottom_toBottomOf="parent"
             tools:listitem="@layout/item_shopping_list" />
 
         <LinearLayout
@@ -47,11 +90,12 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="📝"
-                android:textSize="64sp" />
+            <ImageView
+                android:id="@+id/ivEmptyPencil"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/ic_edit"
+                app:tint="?attr/colorPrimary" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -67,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:gravity="center"
-                android:text="Tap the '+' button below to create your first shopping list."
+                android:text="Tap + to create your first list"
                 android:textColor="@color/grovia_text_secondary"
                 android:textSize="14sp" />
 
@@ -80,10 +124,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="24dp"
+        android:layout_margin="16dp"
         android:contentDescription="Add Shopping List"
         android:src="@drawable/ic_add"
-        app:backgroundTint="@color/grovia_primary"
+        app:backgroundTint="?attr/colorPrimary"
         app:tint="#FFFFFF" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

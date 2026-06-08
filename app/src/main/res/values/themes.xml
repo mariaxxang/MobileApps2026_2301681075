@@ -4,6 +4,7 @@
         <!-- Theme colors mapped to the custom Grovia palette -->
         <item name="colorPrimary">@color/grovia_primary</item>
         <item name="colorPrimaryDark">@color/grovia_primary_variant</item>
+        <item name="colorPrimaryContainer">@color/grovia_primary_container</item>
         <item name="colorSecondary">@color/grovia_secondary</item>
         
         <item name="android:windowBackground">@color/grovia_background</item>
@@ -17,9 +18,21 @@
         <item name="colorOutline">@color/grovia_outline</item>
 
         <!-- Status bar and navigation bar customization -->
-        <item name="android:statusBarColor">?attr/colorPrimaryDark</item>
+        <item name="android:statusBarColor">@color/toolbar_background</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+
+        <!-- Material Dialog corners custom -->
+        <item name="materialAlertDialogTheme">@style/CustomAlertDialogRound</item>
     </style>
 
     <style name="Theme.SharedGroceryApp" parent="Base.Theme.SharedGroceryApp" />
+
+    <style name="CustomAlertDialogRound" parent="Theme.Material3.DayNight.Dialog">
+        <item name="dialogCornerRadius">24dp</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.App.Dialog</item>
+    </style>
+    
+    <style name="ShapeAppearance.App.Dialog" parent="ShapeAppearance.Material3.LargeComponent">
+        <item name="cornerSize">24dp</item>
+    </style>
 </resources>

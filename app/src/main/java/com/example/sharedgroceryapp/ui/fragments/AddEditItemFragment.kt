@@ -8,6 +8,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.example.sharedgroceryapp.GroceryApplication
 import com.example.sharedgroceryapp.data.local.GroceryItem
 import com.example.sharedgroceryapp.databinding.FragmentAddEditItemBinding
@@ -23,6 +26,7 @@ class AddEditItemFragment : Fragment() {
         GroceryViewModelFactory((requireActivity().application as GroceryApplication).repository)
     }
 
+    private val args: AddEditItemFragmentArgs by navArgs()
     private var listId: Int = -1
     private var itemId: Int = -1
     private var isBought: Boolean = false
@@ -40,26 +44,25 @@ class AddEditItemFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Read arguments from Navigation Bundle
-        arguments?.let {
-            listId = it.getInt("listId", -1)
-            itemId = it.getInt("itemId", -1)
-            isBought = it.getBoolean("itemBought", false)
-            val name = it.getString("itemName")
-            quantity = it.getInt("itemQuantity", 1)
+        listId = args.listId
+        itemId = args.itemId
+        isBought = args.itemBought
+        val name = args.itemName
+        quantity = args.itemQuantity
 
-            if (itemId != -1) {
-                binding.toolbar.title = "Edit Item"
-                binding.etItemName.setText(name)
-                binding.tvQuantity.text = quantity.toString()
-            }
+        if (itemId != -1) {
+            binding.tvHeaderTitle.text = "Edit Item"
+            binding.etItemName.setText(name)
+            binding.tvQuantity.text = quantity.toString()
+        } else {
+            binding.tvHeaderTitle.text = "Add Item"
         }
 
         setupListeners()
     }
 
     private fun setupListeners() {
-        binding.toolbar.setNavigationOnClickListener {
+        binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
         }
 

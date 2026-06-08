@@ -24,6 +24,10 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
+import com.example.sharedgroceryapp.data.local.GroceryItem
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class HomeListsFragment : Fragment() {
 
@@ -57,14 +61,8 @@ class HomeListsFragment : Fragment() {
     private fun setupRecyclerView() {
         adapter = ShoppingListAdapter(
             onListClick = { list ->
-                val bundle = Bundle().apply {
-                    putInt("listId", list.id)
-                    putString("listTitle", list.title)
-                }
-                findNavController().navigate(
-                    R.id.action_homeListsFragment_to_groceryListFragment,
-                    bundle
-                )
+                val action = HomeListsFragmentDirections.actionHomeListsFragmentToGroceryListFragment(list.id, list.title)
+                findNavController().navigate(action)
             },
             onListDelete = { list ->
                 showDeleteConfirmationDialog(list)
@@ -75,6 +73,10 @@ class HomeListsFragment : Fragment() {
     }
 
     private fun setupToolbar() {
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+        binding.toolbar.setupWithNavController(navController, appBarConfiguration)
+
         binding.toolbar.inflateMenu(R.menu.menu_home_lists)
         binding.toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
@@ -91,6 +93,11 @@ class HomeListsFragment : Fragment() {
                     }
                     true
                 }
+                R.id.action_settings -> {
+                    val action = HomeListsFragmentDirections.actionHomeListsFragmentToSettingsFragment()
+                    navController.navigate(action)
+                    true
+                }
                 else -> false
             }
         }
@@ -105,58 +112,64 @@ class HomeListsFragment : Fragment() {
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.allLists.collect { lists ->
-                    adapter.submitList(lists)
-                    if (lists.isEmpty()) {
-                        binding.rvShoppingLists.visibility = View.GONE
-                        binding.layoutEmptyState.visibility = View.VISIBLE
-                    } else {
-                        binding.rvShoppingLists.visibility = View.VISIBLE
-                        binding.layoutEmptyState.visibility = View.GONE
+                launch {
+                    viewModel.allLists.collect { lists ->
+                        updateUi(lists, viewModel.allGroceryItems.value)
+                    }
+                }
+                launch {
+                    viewModel.allGroceryItems.collect { items ->
+                        updateUi(viewModel.allLists.value, items)
                     }
                 }
             }
         }
     }
 
+    private fun updateUi(lists: List<ShoppingList>, items: List<GroceryItem>) {
+        val totalItems = items.size
+        binding.tvSummaryStats.text = "${lists.size} lists • $totalItems items total"
+
+        val itemCounts = items.groupBy { it.listId }.mapValues { it.value.size }
+        adapter.submitList(lists, itemCounts)
+
+        if (lists.isEmpty()) {
+            binding.rvShoppingLists.visibility = View.GONE
+            binding.layoutEmptyState.visibility = View.VISIBLE
+            val pulseAnimation = android.view.animation.AnimationUtils.loadAnimation(requireContext(), R.anim.pulse)
+            binding.ivEmptyPencil.startAnimation(pulseAnimation)
+        } else {
+            binding.rvShoppingLists.visibility = View.VISIBLE
+            binding.layoutEmptyState.visibility = View.GONE
+            binding.ivEmptyPencil.clearAnimation()
+        }
+    }
+
     private fun showAddListDialog() {
         val context = requireContext()
-        val textInputLayout = com.google.android.material.textfield.TextInputLayout(context).apply {
-            hint = "List Name (e.g., Weekly Groceries)"
-        }
-        val input = com.google.android.material.textfield.TextInputEditText(context).apply {
-            inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_FLAG_CAP_WORDS
-            maxLines = 1
-        }
-        textInputLayout.addView(input)
+        val dialog = BottomSheetDialog(context)
+        val dialogView = layoutInflater.inflate(R.layout.dialog_create_list, null)
+        dialog.setContentView(dialogView)
 
-        val container = android.widget.FrameLayout(context).apply {
-            val params = android.widget.FrameLayout.LayoutParams(
-                android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-                android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-            ).apply {
-                leftMargin = (16 * resources.displayMetrics.density).toInt()
-                rightMargin = (16 * resources.displayMetrics.density).toInt()
-                topMargin = (8 * resources.displayMetrics.density).toInt()
-                bottomMargin = (8 * resources.displayMetrics.density).toInt()
-            }
-            layoutParams = params
-            addView(textInputLayout)
+        val etListName = dialogView.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.etListName)
+        val btnCancel = dialogView.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnCancel)
+        val btnCreate = dialogView.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnCreate)
+
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
         }
 
-        com.google.android.material.dialog.MaterialAlertDialogBuilder(context)
-            .setTitle("Create Shopping List")
-            .setView(container)
-            .setPositiveButton("Create") { _, _ ->
-                val title = input.text.toString().trim()
-                if (title.isNotEmpty()) {
-                    viewModel.insertList(ShoppingList(title = title))
-                } else {
-                    Toast.makeText(context, "List name cannot be empty", Toast.LENGTH_SHORT).show()
-                }
+        btnCreate.setOnClickListener {
+            val title = etListName.text.toString().trim()
+            if (title.isNotEmpty()) {
+                viewModel.insertList(ShoppingList(title = title))
+                dialog.dismiss()
+            } else {
+                Toast.makeText(context, "List name cannot be empty", Toast.LENGTH_SHORT).show()
             }
-            .setNegativeButton("Cancel", null)
-            .show()
+        }
+
+        dialog.show()
     }
 
     private fun showDeleteConfirmationDialog(list: ShoppingList) {
@@ -183,9 +196,11 @@ class HomeListsFragment : Fragment() {
     ) : RecyclerView.Adapter<ShoppingListAdapter.ShoppingListViewHolder>() {
 
         private var items: List<ShoppingList> = emptyList()
+        private var itemCounts: Map<Int, Int> = emptyMap()
 
-        fun submitList(newItems: List<ShoppingList>) {
+        fun submitList(newItems: List<ShoppingList>, newCounts: Map<Int, Int>) {
             items = newItems
+            itemCounts = newCounts
             notifyDataSetChanged()
         }
 
@@ -199,7 +214,9 @@ class HomeListsFragment : Fragment() {
         }
 
         override fun onBindViewHolder(holder: ShoppingListViewHolder, position: Int) {
-            holder.bind(items[position])
+            val list = items[position]
+            val count = itemCounts[list.id] ?: 0
+            holder.bind(list, count)
         }
 
         override fun getItemCount(): Int = items.size
@@ -209,9 +226,10 @@ class HomeListsFragment : Fragment() {
 
             private val dateFormatter = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
 
-            fun bind(list: ShoppingList) {
+            fun bind(list: ShoppingList, itemCount: Int) {
                 binding.tvListTitle.text = list.title
                 binding.tvListDate.text = "Created: ${dateFormatter.format(Date(list.createdAt))}"
+                binding.tvItemCount.text = itemCount.toString()
 
                 binding.root.setOnClickListener {
                     onListClick(list)

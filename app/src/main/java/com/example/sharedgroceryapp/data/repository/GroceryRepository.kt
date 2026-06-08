@@ -25,6 +25,8 @@ class GroceryRepository(private val groceryDao: GroceryDao) {
         groceryDao.deleteList(list)
     }
 
+    val allGroceryItems: Flow<List<GroceryItem>> = groceryDao.getAllItems()
+
     // Grocery Item methods
     fun getItemsForList(listId: Int): Flow<List<GroceryItem>> {
         return groceryDao.getItemsForList(listId)

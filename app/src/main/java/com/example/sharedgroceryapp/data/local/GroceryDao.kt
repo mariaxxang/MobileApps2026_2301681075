@@ -18,9 +18,11 @@ interface GroceryDao {
     @Delete
     fun deleteList(list: ShoppingList): Int
 
-    // Grocery Items CRUD (Filtered by listId)
     @Query("SELECT * FROM grocery_items WHERE listId = :listId ORDER BY id DESC")
     fun getItemsForList(listId: Int): Flow<List<GroceryItem>>
+
+    @Query("SELECT * FROM grocery_items")
+    fun getAllItems(): Flow<List<GroceryItem>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertItem(item: GroceryItem): Long

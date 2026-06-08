@@ -21,6 +21,12 @@ class GroceryViewModel(private val repository: GroceryRepository) : ViewModel() 
         initialValue = emptyList()
     )
 
+    val allGroceryItems: StateFlow<List<GroceryItem>> = repository.allGroceryItems.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = emptyList()
+    )
+
     fun insertList(list: ShoppingList) = viewModelScope.launch {
         repository.insertList(list)
     }

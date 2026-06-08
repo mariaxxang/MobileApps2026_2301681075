@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_homeListsFragment_to_groceryListFragment"
             app:destination="@id/groceryListFragment" />
+        <action
+            android:id="@+id/action_homeListsFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
 
     <fragment
@@ -71,4 +74,10 @@
             app:argType="string"
             android:defaultValue="Empty List" />
     </dialog>
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.sharedgroceryapp.ui.fragments.SettingsFragment"
+        android:label="Settings"
+        tools:layout="@layout/fragment_settings" />
 </navigation>

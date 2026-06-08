@@ -12,6 +12,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sharedgroceryapp.GroceryApplication
@@ -35,6 +38,7 @@ class GroceryListFragment : Fragment() {
     }
 
     private lateinit var adapter: GroceryAdapter
+    private val args: GroceryListFragmentArgs by navArgs()
     private var currentList: List<GroceryItem> = emptyList()
     private var listId: Int = -1
     private var listTitle: String = "Shopping List"
@@ -51,10 +55,8 @@ class GroceryListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        arguments?.let {
-            listId = it.getInt("listId", -1)
-            listTitle = it.getString("listTitle", "Shopping List")
-        }
+        listId = args.listId
+        listTitle = args.listTitle
 
         setupRecyclerView()
         setupToolbar()
@@ -68,17 +70,14 @@ class GroceryListFragment : Fragment() {
                 viewModel.updateItem(item.copy(isBought = isChecked))
             },
             onItemEdit = { item ->
-                val bundle = Bundle().apply {
-                    putInt("listId", listId)
-                    putInt("itemId", item.id)
-                    putBoolean("itemBought", item.isBought)
-                    putString("itemName", item.name)
-                    putInt("itemQuantity", item.quantity)
-                }
-                findNavController().navigate(
-                    R.id.action_groceryListFragment_to_addEditItemFragment,
-                    bundle
+                val action = GroceryListFragmentDirections.actionGroceryListFragmentToAddEditItemFragment(
+                    listId = listId,
+                    itemId = item.id,
+                    itemBought = item.isBought,
+                    itemName = item.name,
+                    itemQuantity = item.quantity
                 )
+                findNavController().navigate(action)
             },
             onItemDelete = { item ->
                 viewModel.deleteItem(item)
@@ -89,7 +88,11 @@ class GroceryListFragment : Fragment() {
     }
 
     private fun setupToolbar() {
-        binding.toolbar.title = listTitle
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+        binding.toolbar.setupWithNavController(navController, appBarConfiguration)
+        binding.toolbar.navigationIcon?.setTint(requireContext().getColor(R.color.toolbar_content))
+
         binding.toolbar.inflateMenu(R.menu.menu_grocery_list)
         binding.toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
@@ -108,36 +111,21 @@ class GroceryListFragment : Fragment() {
                 }
                 R.id.action_share_qr -> {
                     val formattedList = QRCodeGenerator.formatGroceryList(currentList)
-                    val bundle = Bundle().apply {
-                        putString("qrContent", formattedList)
-                    }
-                    findNavController().navigate(
-                        R.id.action_groceryListFragment_to_qrCodeDialogFragment,
-                        bundle
-                    )
+                    val action = GroceryListFragmentDirections.actionGroceryListFragmentToQrCodeDialogFragment(formattedList)
+                    navController.navigate(action)
                     true
                 }
                 else -> false
             }
         }
-        
-        // Setup back navigation
-        binding.toolbar.setNavigationIcon(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
-        binding.toolbar.setNavigationIconTint(android.graphics.Color.WHITE)
-        binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
     }
 
     private fun setupListeners() {
         binding.fabAddItem.setOnClickListener {
-            val bundle = Bundle().apply {
-                putInt("listId", listId)
-            }
-            findNavController().navigate(
-                R.id.action_groceryListFragment_to_addEditItemFragment,
-                bundle
+            val action = GroceryListFragmentDirections.actionGroceryListFragmentToAddEditItemFragment(
+                listId = listId
             )
+            findNavController().navigate(action)
         }
     }
 
@@ -148,6 +136,9 @@ class GroceryListFragment : Fragment() {
                     val sortedItems = GroceryListUtils.sortItems(items)
                     currentList = sortedItems
                     adapter.submitList(sortedItems)
+                    
+                    updateStats(sortedItems)
+                    
                     if (sortedItems.isEmpty()) {
                         binding.rvGroceryList.visibility = View.GONE
                         binding.layoutEmptyState.visibility = View.VISIBLE
@@ -158,6 +149,15 @@ class GroceryListFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun updateStats(items: List<GroceryItem>) {
+        val total = items.size
+        val completed = items.count { it.isBought }
+        binding.tvListStats.text = "$total items • $completed completed"
+        
+        val progress = if (total > 0) (completed * 100) / total else 0
+        binding.progressIndicator.setProgress(progress, true)
     }
 
     override fun onDestroyView() {
@@ -199,7 +199,15 @@ class GroceryListFragment : Fragment() {
 
             fun bind(item: GroceryItem) {
                 binding.tvItemName.text = item.name
-                binding.tvItemQuantity.text = "Quantity: ${item.quantity}"
+                binding.tvItemQuantity.text = "Qty: ${item.quantity}"
+                
+                if (item.isBought) {
+                    binding.root.alpha = 0.5f
+                    binding.viewStatusStrip.setBackgroundColor(binding.root.context.getColor(R.color.grovia_secondary))
+                } else {
+                    binding.root.alpha = 1.0f
+                    binding.viewStatusStrip.setBackgroundColor(binding.root.context.getColor(R.color.grovia_primary))
+                }
                 
                 // Remove existing listener before setting checked status to avoid trigger recursion
                 binding.checkboxBought.setOnCheckedChangeListener(null)

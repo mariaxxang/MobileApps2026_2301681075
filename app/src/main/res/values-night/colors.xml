@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Dark Mode Palette overrides -->
-    <color name="grovia_primary">#129479</color>
-    <color name="grovia_primary_variant">#0B6451</color>
-    <color name="grovia_secondary">#3FB399</color>
-    <color name="grovia_secondary_variant">#5D9E8F</color>
+    <color name="grovia_primary">#81C784</color>
+    <color name="grovia_primary_variant">#1B5E20</color>
+    <color name="grovia_primary_container">#2E7D32</color>
+    
+    <color name="grovia_secondary">#A5D6A7</color>
+    <color name="grovia_secondary_variant">#4CAF50</color>
 
-    <color name="grovia_background">#121715</color>
-    <color name="grovia_surface">#1C2220</color>
+    <color name="grovia_background">#111612</color>
+    <color name="grovia_surface">#1B241D</color>
 
-    <color name="grovia_text_primary">#E1E4E2</color>
-    <color name="grovia_text_secondary">#9CA3A0</color>
-    <color name="grovia_outline">#3E4542</color>
+    <color name="grovia_text_primary">#E8F5E9</color>
+    <color name="grovia_text_secondary">#A5B6A9</color>
+    <color name="grovia_outline">#324237</color>
+
+    <!-- Themed colors for modern Material 3 styling (dark mode overrides) -->
+    <color name="screen_background">@color/grovia_background</color>
+    <color name="toolbar_background">@color/grovia_surface</color>
+    <color name="toolbar_content">@color/grovia_text_primary</color>
 </resources>

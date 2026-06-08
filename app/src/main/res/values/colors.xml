@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="grovia_primary">#0B6451</color>
-    <color name="grovia_primary_variant">#0E4B36</color>
-    <color name="grovia_secondary">#2A8671</color>
-    <color name="grovia_secondary_variant">#5D9E8F</color>
+    <color name="grovia_primary">#1B5E20</color>
+    <color name="grovia_primary_variant">#0F3A13</color>
+    <color name="grovia_primary_container">#A5D6A7</color>
+    
+    <color name="grovia_secondary">#2E7D32</color>
+    <color name="grovia_secondary_variant">#4CAF50</color>
 
-    <color name="grovia_background">#F1F2F1</color>
+    <color name="grovia_background">#F1F8E9</color>
     <color name="grovia_surface">#FFFFFF</color>
 
-    <color name="grovia_text_primary">#162D25</color>
-    <color name="grovia_text_secondary">#5F6561</color>
-    <color name="grovia_outline">#9EA9A3</color>
+    <color name="grovia_text_primary">#1B241D</color>
+    <color name="grovia_text_secondary">#556B5C</color>
+    <color name="grovia_outline">#D5E0D7</color>
+
+    <!-- Themed colors for modern Material 3 styling -->
+    <color name="screen_background">#F5F5F5</color>
+    <color name="toolbar_background">@color/grovia_primary</color>
+    <color name="toolbar_content">#FFFFFF</color>
 </resources>

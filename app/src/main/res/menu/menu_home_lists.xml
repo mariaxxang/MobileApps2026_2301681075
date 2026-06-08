@@ -5,6 +5,10 @@
         android:id="@+id/action_toggle_theme"
         android:icon="@drawable/ic_theme_toggle"
         android:title="Toggle Theme"
-        app:iconTint="#FFFFFF"
+        app:iconTint="@color/toolbar_content"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_settings"
+        android:title="Settings"
+        app:showAsAction="never" />
 </menu>
