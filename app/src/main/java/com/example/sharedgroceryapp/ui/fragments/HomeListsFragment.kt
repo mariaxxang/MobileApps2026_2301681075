@@ -29,6 +29,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.sharedgroceryapp.data.local.GroceryItem
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
+import com.example.sharedgroceryapp.utils.TestDetector
+
 class HomeListsFragment : Fragment() {
 
     private var _binding: FragmentHomeListsBinding? = null
@@ -136,8 +138,10 @@ class HomeListsFragment : Fragment() {
         if (lists.isEmpty()) {
             binding.rvShoppingLists.visibility = View.GONE
             binding.layoutEmptyState.visibility = View.VISIBLE
-            val pulseAnimation = android.view.animation.AnimationUtils.loadAnimation(requireContext(), R.anim.pulse)
-            binding.ivEmptyPencil.startAnimation(pulseAnimation)
+            if (!TestDetector.isUnderTest) {
+                val pulseAnimation = android.view.animation.AnimationUtils.loadAnimation(requireContext(), R.anim.pulse)
+                binding.ivEmptyPencil.startAnimation(pulseAnimation)
+            }
         } else {
             binding.rvShoppingLists.visibility = View.VISIBLE
             binding.layoutEmptyState.visibility = View.GONE

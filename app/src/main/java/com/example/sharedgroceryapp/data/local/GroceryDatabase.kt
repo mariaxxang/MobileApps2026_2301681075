@@ -8,6 +8,8 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
+import com.example.sharedgroceryapp.utils.TestDetector
+
 @Database(entities = [ShoppingList::class, GroceryItem::class], version = 3, exportSchema = false)
 abstract class GroceryDatabase : RoomDatabase() {
     
@@ -31,10 +33,11 @@ abstract class GroceryDatabase : RoomDatabase() {
 
         fun getDatabase(context: Context): GroceryDatabase {
             return INSTANCE ?: synchronized(this) {
+                val dbName = if (TestDetector.isUnderTest) "grocery_database_test" else "grocery_database"
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     GroceryDatabase::class.java,
-                    "grocery_database"
+                    dbName
                 )
                 .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                 .fallbackToDestructiveMigration()
