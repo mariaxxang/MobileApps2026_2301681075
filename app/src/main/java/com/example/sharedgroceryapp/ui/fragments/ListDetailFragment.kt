@@ -82,10 +82,6 @@ class ListDetailFragment : Fragment() {
             showDuplicateListDialog()
         }
 
-        binding.btnShareList.setOnClickListener {
-            shareList()
-        }
-
         binding.btnClearCompleted.setOnClickListener {
             viewModel.deleteCompletedItems(listId.toInt())
             Toast.makeText(requireContext(), "Completed items cleared", Toast.LENGTH_SHORT).show()
@@ -124,26 +120,7 @@ class ListDetailFragment : Fragment() {
         dialog.show()
     }
 
-    private fun shareList() {
-        val shareBuilder = StringBuilder()
-        shareBuilder.append("Shopping List: $listName\n\n")
 
-        if (itemsList.isEmpty()) {
-            shareBuilder.append("(No items)")
-        } else {
-            itemsList.forEach { item ->
-                val status = if (item.isBought) "[x]" else "[ ]"
-                shareBuilder.append("$status ${item.name} (Qty: ${item.quantity}) - ${item.category}\n")
-            }
-        }
-
-        val shareIntent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
-            type = "text/plain"
-            putExtra(android.content.Intent.EXTRA_SUBJECT, "Shopping List: $listName")
-            putExtra(android.content.Intent.EXTRA_TEXT, shareBuilder.toString())
-        }
-        startActivity(android.content.Intent.createChooser(shareIntent, "Share List"))
-    }
 
     private fun observeViewModel() {
         // Observe lists to get details like creation time

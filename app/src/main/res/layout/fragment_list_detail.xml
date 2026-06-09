@@ -286,19 +286,7 @@
                         app:strokeColor="?attr/colorPrimary"
                         android:layout_marginBottom="12dp" />
 
-                    <!-- Share List Button -->
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnShareList"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:text="Share List"
-                        app:icon="@drawable/ic_qrcode"
-                        app:iconGravity="textStart"
-                        app:cornerRadius="12dp"
-                        android:textColor="?attr/colorPrimary"
-                        app:strokeColor="?attr/colorPrimary"
-                        android:layout_marginBottom="12dp" />
+
 
                     <!-- Clear Completed Button -->
                     <com.google.android.material.button.MaterialButton
