@@ -3,13 +3,13 @@
     <item
         android:id="@+id/homeListsFragment"
         android:icon="@drawable/ic_home"
-        android:title="Lists" />
+        android:title="@string/menu_title_lists" />
     <item
         android:id="@+id/searchFragment"
         android:icon="@drawable/ic_search"
-        android:title="Search" />
+        android:title="@string/menu_title_search" />
     <item
         android:id="@+id/statisticsFragment"
         android:icon="@drawable/ic_bar_chart"
-        android:title="Stats" />
+        android:title="@string/menu_title_stats" />
 </menu>

@@ -15,7 +15,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="My Shopping Lists"
+            app:title="@string/my_shopping_lists"
             app:titleTextColor="@color/toolbar_content" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -57,7 +57,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="0 lists • 0 items total"
+                    tools:text="0 lists • 0 items total"
                     android:textColor="?attr/colorPrimary"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -101,7 +101,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="No shopping lists yet!"
+                android:text="@string/home_empty_title"
                 android:textColor="@color/grovia_text_primary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -111,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:gravity="center"
-                android:text="Tap + to create your first list"
+                android:text="@string/home_empty_subtitle"
                 android:textColor="@color/grovia_text_secondary"
                 android:textSize="14sp" />
 
@@ -125,7 +125,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:contentDescription="Add Shopping List"
+        android:contentDescription="@string/add_shopping_list_desc"
         android:src="@drawable/ic_add"
         app:backgroundTint="?attr/colorPrimary"
         app:tint="#FFFFFF" />

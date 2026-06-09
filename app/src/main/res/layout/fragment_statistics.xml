@@ -17,7 +17,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Statistics"
+            app:title="@string/statistics_title"
             app:titleTextColor="@color/toolbar_content" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -62,7 +62,7 @@
                             android:id="@+id/tvTotalListsCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0"
+                            tools:text="0"
                             android:textAppearance="?attr/textAppearanceHeadlineMedium"
                             android:textColor="?attr/colorPrimary"
                             android:textStyle="bold" />
@@ -71,7 +71,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="Lists Created"
+                            android:text="@string/lists_created"
                             android:textAppearance="?attr/textAppearanceBodyMedium"
                             android:textColor="?attr/colorOnSurfaceVariant" />
                     </LinearLayout>
@@ -94,7 +94,7 @@
                             android:id="@+id/tvTotalItemsCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0"
+                            tools:text="0"
                             android:textAppearance="?attr/textAppearanceHeadlineMedium"
                             android:textColor="?attr/colorSecondary"
                             android:textStyle="bold" />
@@ -103,7 +103,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="Total Items"
+                            android:text="@string/total_items"
                             android:textAppearance="?attr/textAppearanceBodyMedium"
                             android:textColor="?attr/colorOnSurfaceVariant" />
                     </LinearLayout>
@@ -131,7 +131,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Completion Status"
+                        android:text="@string/completion_status"
                         android:textAppearance="?attr/textAppearanceTitleMedium"
                         android:textColor="?attr/colorOnSurface"
                         android:textStyle="bold" />
@@ -180,7 +180,7 @@
                                         android:id="@+id/tvActiveCount"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="0 pending"
+                                        tools:text="0 pending"
                                         android:textAppearance="?attr/textAppearanceBodyMedium"
                                         android:textStyle="bold"
                                         android:textColor="?attr/colorOnSurface" />
@@ -188,7 +188,7 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="Active Items"
+                                        android:text="@string/active_items"
                                         android:textAppearance="?attr/textAppearanceLabelSmall"
                                         android:textColor="?attr/colorOnSurfaceVariant" />
                                 </LinearLayout>
@@ -217,7 +217,7 @@
                                         android:id="@+id/tvCompletedCount"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="0 bought"
+                                        tools:text="0 bought"
                                         android:textAppearance="?attr/textAppearanceBodyMedium"
                                         android:textStyle="bold"
                                         android:textColor="?attr/colorOnSurface" />
@@ -225,7 +225,7 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="Completed Items"
+                                        android:text="@string/completed_items"
                                         android:textAppearance="?attr/textAppearanceLabelSmall"
                                         android:textColor="?attr/colorOnSurfaceVariant" />
                                 </LinearLayout>
@@ -258,7 +258,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Items by Category"
+                        android:text="@string/items_by_category"
                         android:textAppearance="?attr/textAppearanceTitleMedium"
                         android:textColor="?attr/colorOnSurface"
                         android:textStyle="bold" />
@@ -293,7 +293,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Shopping Lists Created (Last 6 Months)"
+                        android:text="@string/monthly_lists_created"
                         android:textAppearance="?attr/textAppearanceTitleMedium"
                         android:textColor="?attr/colorOnSurface"
                         android:textStyle="bold" />

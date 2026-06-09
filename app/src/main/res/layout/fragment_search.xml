@@ -16,7 +16,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Search Items"
+            app:title="@string/search_items_title"
             app:titleTextColor="@color/toolbar_content" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:hint="Search items across all lists..."
+            android:hint="@string/search_hint"
             app:startIconDrawable="@drawable/ic_search"
             app:startIconTint="?attr/colorPrimary"
             app:boxStrokeColor="?attr/colorPrimary"
@@ -68,7 +68,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="RECENT SEARCHES"
+                    android:text="@string/recent_searches"
                     android:textColor="?attr/colorPrimary"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -78,7 +78,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:text="Clear All"
+                    android:text="@string/clear_all"
                     android:textColor="@color/grovia_secondary"
                     android:textSize="12sp"
                     android:textStyle="bold"
@@ -134,7 +134,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Search Groceries"
+                android:text="@string/search_empty_title"
                 android:textColor="@color/grovia_text_primary"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -145,7 +145,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:gravity="center"
-                android:text="Search for items across all lists"
+                android:text="@string/search_empty_subtitle"
                 android:textColor="@color/grovia_text_secondary"
                 android:textSize="14sp" />
 

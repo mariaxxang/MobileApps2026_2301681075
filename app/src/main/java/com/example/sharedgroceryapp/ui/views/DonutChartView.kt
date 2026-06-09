@@ -81,7 +81,7 @@ class DonutChartView @JvmOverloads constructor(
             canvas.drawArc(rectF, 0f, 360f, false, backgroundPaint)
             
             // Draw 0%
-            drawCenterText(canvas, "0%", "No items")
+            drawCenterText(canvas, "0%", context.getString(com.example.sharedgroceryapp.R.string.chart_no_items))
         } else {
             // Draw full background track first
             canvas.drawArc(rectF, 0f, 360f, false, backgroundPaint)
@@ -101,7 +101,7 @@ class DonutChartView @JvmOverloads constructor(
             }
 
             val percentText = "${(completedPercentage * 100).toInt()}%"
-            drawCenterText(canvas, percentText, "$completedCount / $total Done")
+            drawCenterText(canvas, percentText, context.getString(com.example.sharedgroceryapp.R.string.chart_done_format, completedCount, total))
         }
     }
 

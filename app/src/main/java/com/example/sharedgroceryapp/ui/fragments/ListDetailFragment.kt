@@ -84,7 +84,7 @@ class ListDetailFragment : Fragment() {
 
         binding.btnClearCompleted.setOnClickListener {
             viewModel.deleteCompletedItems(listId.toInt())
-            Toast.makeText(requireContext(), "Completed items cleared", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.toast_completed_cleared), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -98,9 +98,9 @@ class ListDetailFragment : Fragment() {
         val btnCancel = dialogView.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnCancel)
         val btnCreate = dialogView.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnCreate)
 
-        tvTitle.text = "Duplicate Shopping List"
-        etListName.setText("$listName (Copy)")
-        btnCreate.text = "Duplicate"
+        tvTitle.text = getString(R.string.dialog_duplicate_title)
+        etListName.setText(getString(R.string.list_copy_format, listName))
+        btnCreate.text = getString(R.string.duplicate)
 
         btnCancel.setOnClickListener {
             dialog.dismiss()
@@ -110,10 +110,10 @@ class ListDetailFragment : Fragment() {
             val newTitle = etListName.text.toString().trim()
             if (newTitle.isNotEmpty()) {
                 viewModel.duplicateList(newTitle, itemsList)
-                Toast.makeText(requireContext(), "List duplicated successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.toast_list_duplicated), Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
             } else {
-                etListName.error = "Name cannot be empty"
+                etListName.error = getString(R.string.error_empty_list_name)
             }
         }
 
@@ -135,7 +135,7 @@ class ListDetailFragment : Fragment() {
 
                         val dateFormat = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
                         val dateStr = dateFormat.format(Date(list.createdAt))
-                        binding.tvDetailListCreated.text = "Created on: $dateStr"
+                        binding.tvDetailListCreated.text = getString(R.string.created_on_format, dateStr)
                     }
                 }
             }
@@ -158,7 +158,7 @@ class ListDetailFragment : Fragment() {
         val active = total - completed
         val totalQty = items.sumOf { it.quantity }
 
-        binding.tvDetailListStats.text = "$total items total • $completed completed"
+        binding.tvDetailListStats.text = getString(R.string.list_detail_stats_format, total, completed)
         binding.tvActiveItemsCount.text = active.toString()
         binding.tvCompletedItemsCount.text = completed.toString()
         binding.tvTotalQuantityCount.text = totalQty.toString()

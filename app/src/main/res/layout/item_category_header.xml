@@ -32,7 +32,7 @@
                 android:id="@+id/ivHeaderIcon"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:contentDescription="Category Icon"
+                android:contentDescription="@string/category_icon_desc"
                 tools:src="@drawable/ic_nutrition" />
 
             <!-- Category name 12sp uppercase bold -->

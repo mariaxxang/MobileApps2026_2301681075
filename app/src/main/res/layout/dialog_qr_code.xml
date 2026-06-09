@@ -20,7 +20,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Share Shopping List"
+            android:text="@string/dialog_qr_title"
             android:textColor="@color/grovia_text_primary"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:gravity="center"
-            android:text="Scan this QR code from another device to import your list."
+            android:text="@string/dialog_qr_instructions"
             android:textColor="@color/grovia_text_secondary"
             android:textSize="13sp" />
 
@@ -39,7 +39,7 @@
             android:layout_width="250dp"
             android:layout_height="250dp"
             android:layout_marginTop="20dp"
-            android:contentDescription="QR Code"
+            android:contentDescription="@string/qr_code_desc"
             android:scaleType="fitCenter" />
 
         <com.google.android.material.button.MaterialButton
@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="24dp"
-            android:text="Done"
+            android:text="@string/done"
             android:textColor="@color/grovia_primary"
             android:textSize="16sp"
             android:textStyle="bold" />

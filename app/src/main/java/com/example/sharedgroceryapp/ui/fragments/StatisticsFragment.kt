@@ -56,8 +56,8 @@ class StatisticsFragment : Fragment() {
                     binding.tvTotalListsCount.text = state.totalListsCount.toString()
                     binding.tvTotalItemsCount.text = state.totalItemsCount.toString()
 
-                    binding.tvActiveCount.text = "${state.activeItemsCount} pending"
-                    binding.tvCompletedCount.text = "${state.completedItemsCount} bought"
+                    binding.tvActiveCount.text = getString(R.string.active_items_count_format, state.activeItemsCount)
+                    binding.tvCompletedCount.text = getString(R.string.completed_items_count_format, state.completedItemsCount)
 
                     // Bind to custom chart views
                     binding.donutChartView.setData(state.activeItemsCount, state.completedItemsCount)

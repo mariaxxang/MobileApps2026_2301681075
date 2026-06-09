@@ -16,7 +16,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="List Details"
+            app:title="@string/list_details_title"
             app:titleTextColor="@color/toolbar_content" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -111,7 +111,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="STATISTICS"
+                        android:text="@string/section_statistics"
                         android:textColor="?attr/colorPrimary"
                         android:textSize="12sp"
                         android:textStyle="bold"
@@ -136,7 +136,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginStart="12dp"
-                            android:text="Active Items"
+                            android:text="@string/active_items"
                             android:textColor="?attr/colorOnSurface"
                             android:textSize="14sp" />
 
@@ -175,7 +175,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginStart="12dp"
-                            android:text="Completed Items"
+                            android:text="@string/completed_items"
                             android:textColor="?attr/colorOnSurface"
                             android:textSize="14sp" />
 
@@ -214,7 +214,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginStart="12dp"
-                            android:text="Total Item Quantity"
+                            android:text="@string/total_quantity"
                             android:textColor="?attr/colorOnSurface"
                             android:textSize="14sp" />
 
@@ -252,7 +252,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="ACTIONS"
+                        android:text="@string/section_actions"
                         android:textColor="?attr/colorPrimary"
                         android:textSize="12sp"
                         android:textStyle="bold"
@@ -264,7 +264,7 @@
                         style="@style/Widget.Material3.Button"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
-                        android:text="View Items List"
+                        android:text="@string/action_view_items"
                         app:icon="@drawable/ic_cart"
                         app:iconGravity="textStart"
                         app:cornerRadius="12dp"
@@ -278,7 +278,7 @@
                         style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:text="Duplicate List"
+                        android:text="@string/action_duplicate_list"
                         app:icon="@drawable/ic_add"
                         app:iconGravity="textStart"
                         app:cornerRadius="12dp"
@@ -294,7 +294,7 @@
                         style="@style/Widget.Material3.Button.TextButton"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:text="Clear Completed Items"
+                        android:text="@string/action_clear_completed"
                         android:textColor="@color/grovia_secondary"
                         app:cornerRadius="12dp" />
 

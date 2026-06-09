@@ -17,7 +17,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Settings"
+            app:title="@string/settings_title"
             app:titleTextColor="@color/toolbar_content" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -59,13 +59,13 @@
                         android:layout_height="64dp"
                         android:src="@drawable/ic_shopping_bag"
                         app:tint="?attr/colorPrimary"
-                        android:contentDescription="App Icon" />
+                        android:contentDescription="@string/app_icon_desc" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Smart Grocery List"
+                        android:text="@string/smart_grocery_list"
                         android:textColor="?attr/colorOnSurface"
                         android:textSize="20sp"
                         android:textStyle="bold" />
@@ -74,7 +74,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Version 1.2.0"
+                        android:text="@string/version_name"
                         android:textColor="@color/grovia_text_secondary"
                         android:textSize="14sp" />
 
@@ -88,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="GENERAL"
+                android:text="@string/general_section"
                 android:textColor="?attr/colorPrimary"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -121,13 +121,13 @@
                             android:layout_marginEnd="12dp"
                             android:src="@drawable/ic_bell"
                             app:tint="?attr/colorPrimary"
-                            android:contentDescription="Notifications" />
+                            android:contentDescription="@string/notifications_desc" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Enable Notifications"
+                            android:text="@string/enable_notifications"
                             android:textColor="?attr/colorOnSurface"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -160,13 +160,13 @@
                             android:layout_marginEnd="12dp"
                             android:src="@drawable/ic_speaker"
                             app:tint="?attr/colorPrimary"
-                            android:contentDescription="Sound Effects" />
+                            android:contentDescription="@string/sound_effects_desc" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Sound Effects"
+                            android:text="@string/sound_effects"
                             android:textColor="?attr/colorOnSurface"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -197,7 +197,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="ABOUT"
+                android:text="@string/about_section"
                 android:textColor="?attr/colorPrimary"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -224,7 +224,7 @@
                         android:layout_marginEnd="16dp"
                         android:src="@drawable/ic_shopping_bag"
                         app:tint="?attr/colorPrimary"
-                        android:contentDescription="About App Icon" />
+                        android:contentDescription="@string/app_icon_desc" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -235,7 +235,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Smart Local Grocery List"
+                            android:text="@string/smart_local_grocery_list"
                             android:textColor="?attr/colorOnSurface"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -244,7 +244,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="Version 1.2.0"
+                            android:text="@string/version_name"
                             android:textColor="@color/grovia_text_secondary"
                             android:textSize="14sp" />
 
@@ -252,7 +252,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:text="Developed for university mobile development course 2026. Strictly conforms to Material 3 UI Guidelines."
+                            android:text="@string/app_description"
                             android:textColor="@color/grovia_text_secondary"
                             android:textSize="12sp" />
 

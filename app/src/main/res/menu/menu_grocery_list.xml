@@ -4,13 +4,13 @@
     <item
         android:id="@+id/action_toggle_theme"
         android:icon="@drawable/ic_theme_toggle"
-        android:title="Toggle Theme"
+        android:title="@string/menu_toggle_theme"
         app:iconTint="@color/toolbar_content"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_share_qr"
         android:icon="@drawable/ic_qrcode"
-        android:title="Share list QR Code"
+        android:title="@string/menu_share_qr"
         app:iconTint="@color/toolbar_content"
         app:showAsAction="always" />
 </menu>

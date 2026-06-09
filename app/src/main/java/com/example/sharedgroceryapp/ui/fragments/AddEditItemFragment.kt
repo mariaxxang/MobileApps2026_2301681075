@@ -16,6 +16,7 @@ import com.example.sharedgroceryapp.data.local.GroceryItem
 import com.example.sharedgroceryapp.databinding.FragmentAddEditItemBinding
 import com.example.sharedgroceryapp.ui.viewmodel.GroceryViewModel
 import com.example.sharedgroceryapp.ui.viewmodel.GroceryViewModelFactory
+import com.example.sharedgroceryapp.R
 
 class AddEditItemFragment : Fragment() {
 
@@ -54,11 +55,11 @@ class AddEditItemFragment : Fragment() {
         setupCategoryGroup()
 
         if (itemId != -1) {
-            binding.tvHeaderTitle.text = "Edit Item"
+            binding.tvHeaderTitle.text = getString(R.string.edit_item)
             binding.etItemName.setText(name)
             binding.tvQuantity.text = quantity.toString()
         } else {
-            binding.tvHeaderTitle.text = "Add Item"
+            binding.tvHeaderTitle.text = getString(R.string.add_item)
         }
 
         setupListeners()
@@ -72,7 +73,7 @@ class AddEditItemFragment : Fragment() {
         com.example.sharedgroceryapp.data.local.Category.values().forEach { category ->
             val chip = com.google.android.material.chip.Chip(context).apply {
                 id = View.generateViewId()
-                text = category.displayName
+                text = context.getString(category.displayNameResId)
                 chipIcon = context.getDrawable(category.iconResId)
                 isChipIconVisible = true
                 isCheckable = true
@@ -146,7 +147,7 @@ class AddEditItemFragment : Fragment() {
         val name = binding.etItemName.text.toString().trim()
 
         if (name.isEmpty()) {
-            binding.tilItemName.error = "Item name cannot be empty"
+            binding.tilItemName.error = getString(R.string.error_empty_item_name)
             return
         }
 
@@ -156,12 +157,12 @@ class AddEditItemFragment : Fragment() {
             // Add Mode
             val item = GroceryItem(listId = listId, name = name, quantity = quantity, isBought = false, category = selectedCategory)
             viewModel.insertItem(item)
-            Toast.makeText(requireContext(), "Item added", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.toast_item_added), Toast.LENGTH_SHORT).show()
         } else {
             // Edit Mode
             val item = GroceryItem(id = itemId, listId = listId, name = name, quantity = quantity, isBought = isBought, category = selectedCategory)
             viewModel.updateItem(item)
-            Toast.makeText(requireContext(), "Item updated", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.toast_item_updated), Toast.LENGTH_SHORT).show()
         }
 
         findNavController().popBackStack()

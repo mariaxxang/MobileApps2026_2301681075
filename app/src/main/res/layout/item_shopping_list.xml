@@ -76,7 +76,7 @@
                 android:layout_height="40dp"
                 android:layout_marginEnd="4dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Delete List"
+                android:contentDescription="@string/delete_list_desc"
                 android:src="@drawable/ic_delete"
                 app:tint="#B00020" />
 
@@ -84,7 +84,7 @@
                 android:id="@+id/ivChevron"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:contentDescription="Navigate"
+                android:contentDescription="@string/navigate_desc"
                 android:src="@drawable/ic_chevron_right"
                 app:tint="?attr/colorPrimary" />
 

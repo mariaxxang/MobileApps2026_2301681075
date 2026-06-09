@@ -130,7 +130,7 @@ class HomeListsFragment : Fragment() {
 
     private fun updateUi(lists: List<ShoppingList>, items: List<GroceryItem>) {
         val totalItems = items.size
-        binding.tvSummaryStats.text = "${lists.size} lists • $totalItems items total"
+        binding.tvSummaryStats.text = getString(R.string.home_stats_format, lists.size, totalItems)
 
         val itemCounts = items.groupBy { it.listId }.mapValues { it.value.size }
         adapter.submitList(lists, itemCounts)
@@ -169,7 +169,7 @@ class HomeListsFragment : Fragment() {
                 viewModel.insertList(ShoppingList(title = title))
                 dialog.dismiss()
             } else {
-                Toast.makeText(context, "List name cannot be empty", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.toast_empty_name), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -178,13 +178,13 @@ class HomeListsFragment : Fragment() {
 
     private fun showDeleteConfirmationDialog(list: ShoppingList) {
         com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Delete List?")
-            .setMessage("Are you sure you want to delete '${list.title}'? All items in this list will be permanently removed.")
-            .setPositiveButton("Delete") { _, _ ->
+            .setTitle(R.string.dialog_delete_title)
+            .setMessage(getString(R.string.dialog_delete_msg, list.title))
+            .setPositiveButton(R.string.delete) { _, _ ->
                 viewModel.deleteList(list)
-                Toast.makeText(requireContext(), "List deleted", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.toast_list_deleted), Toast.LENGTH_SHORT).show()
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(R.string.cancel, null)
             .show()
     }
 
@@ -232,7 +232,7 @@ class HomeListsFragment : Fragment() {
 
             fun bind(list: ShoppingList, itemCount: Int) {
                 binding.tvListTitle.text = list.title
-                binding.tvListDate.text = "Created: ${dateFormatter.format(Date(list.createdAt))}"
+                binding.tvListDate.text = binding.root.context.getString(R.string.created_date_format, dateFormatter.format(Date(list.createdAt)))
                 binding.tvItemCount.text = itemCount.toString()
 
                 binding.root.setOnClickListener {

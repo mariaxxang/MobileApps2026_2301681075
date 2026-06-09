@@ -73,7 +73,7 @@ class SearchFragment : Fragment() {
 
                 // Navigate to List Detail
                 val sourceList = allLists.firstOrNull { it.id == item.listId }
-                val listName = sourceList?.title ?: "Shopping List"
+                val listName = sourceList?.title ?: getString(R.string.list_fallback_title)
                 val action = SearchFragmentDirections.actionSearchFragmentToListDetailFragment(
                     listId = item.listId.toLong(),
                     listName = listName
@@ -107,8 +107,8 @@ class SearchFragment : Fragment() {
                     binding.rvSearchResults.visibility = View.GONE
                     binding.layoutEmptyState.visibility = View.VISIBLE
                     binding.ivEmptyIcon.setImageResource(R.drawable.ic_search)
-                    binding.tvEmptyTitle.text = "Search Groceries"
-                    binding.tvEmptySubtitle.text = "Search for items across all lists"
+                    binding.tvEmptyTitle.text = getString(R.string.search_empty_title)
+                    binding.tvEmptySubtitle.text = getString(R.string.search_empty_subtitle)
                     loadRecentSearches()
                 } else {
                     performSearch(query)
@@ -134,8 +134,8 @@ class SearchFragment : Fragment() {
                     binding.rvSearchResults.visibility = View.GONE
                     binding.layoutEmptyState.visibility = View.VISIBLE
                     binding.ivEmptyIcon.setImageResource(R.drawable.ic_filter)
-                    binding.tvEmptyTitle.text = "No results found"
-                    binding.tvEmptySubtitle.text = "Try checking your spelling or search for something else"
+                    binding.tvEmptyTitle.text = getString(R.string.search_no_results)
+                    binding.tvEmptySubtitle.text = getString(R.string.search_no_results_subtitle)
                 } else {
                     binding.rvSearchResults.visibility = View.VISIBLE
                     binding.layoutEmptyState.visibility = View.GONE
@@ -250,11 +250,11 @@ class SearchFragment : Fragment() {
 
             fun bind(item: GroceryItem) {
                 binding.tvItemName.text = item.name
-                binding.tvItemQuantity.text = "Qty: ${item.quantity}"
+                binding.tvItemQuantity.text = binding.root.context.getString(R.string.item_qty_format, item.quantity)
 
                 // Find category to display chip
                 val category = Category.fromString(item.category)
-                binding.tvCategoryChip.text = category.displayName
+                binding.tvCategoryChip.text = binding.root.context.getString(category.displayNameResId)
                 
                 val color = android.graphics.Color.parseColor(category.colorHex)
                 binding.tvCategoryChip.backgroundTintList = android.content.res.ColorStateList.valueOf(color)
@@ -262,7 +262,8 @@ class SearchFragment : Fragment() {
                 // Find source list
                 val lists = listsProvider()
                 val sourceList = lists.firstOrNull { it.id == item.listId }
-                binding.tvListName.text = "In list: ${sourceList?.title ?: "Shopping List"}"
+                val listTitle = sourceList?.title ?: binding.root.context.getString(R.string.list_fallback_title)
+                binding.tvListName.text = binding.root.context.getString(R.string.in_list_format, listTitle)
 
                 binding.root.setOnClickListener {
                     onItemClick(item)

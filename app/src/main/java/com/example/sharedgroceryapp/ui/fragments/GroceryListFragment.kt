@@ -152,7 +152,7 @@ class GroceryListFragment : Fragment() {
         Category.values().forEach { category ->
             val chip = com.google.android.material.chip.Chip(requireContext()).apply {
                 id = View.generateViewId()
-                text = category.displayName
+                text = requireContext().getString(category.displayNameResId)
                 chipIcon = requireContext().getDrawable(category.iconResId)
                 isChipIconVisible = true
                 isCheckable = true
@@ -254,7 +254,7 @@ class GroceryListFragment : Fragment() {
     private fun updateStats(items: List<GroceryItem>) {
         val total = items.size
         val completed = items.count { it.isBought }
-        binding.tvListStats.text = "$total items • $completed completed"
+        binding.tvListStats.text = getString(R.string.list_stats_format, total, completed)
         
         val progress = if (total > 0) (completed * 100) / total else 0
         binding.progressIndicator.setProgress(progress, true)
@@ -323,7 +323,8 @@ class GroceryListFragment : Fragment() {
 
             fun bind(header: ListItem.Header) {
                 val category = header.category
-                binding.tvHeaderName.text = category.displayName.uppercase()
+                val displayName = binding.root.context.getString(category.displayNameResId)
+                binding.tvHeaderName.text = displayName.uppercase()
                 binding.ivHeaderIcon.setImageResource(category.iconResId)
                 binding.tvHeaderCount.text = header.count.toString()
 
@@ -339,7 +340,7 @@ class GroceryListFragment : Fragment() {
 
             fun bind(item: GroceryItem) {
                 binding.tvItemName.text = item.name
-                binding.tvItemQuantity.text = "Qty: ${item.quantity}"
+                binding.tvItemQuantity.text = binding.root.context.getString(R.string.item_qty_format, item.quantity)
                 
                 if (item.isBought) {
                     binding.root.alpha = 0.5f

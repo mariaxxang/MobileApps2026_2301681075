@@ -109,13 +109,14 @@ class CategoryBarChartView @JvmOverloads constructor(
     }
 
     private fun getShortLabel(category: Category): String {
-        return when (category) {
-            Category.FRUITS -> "Veg"
-            Category.DAIRY -> "Dairy"
-            Category.MEAT -> "Meat"
-            Category.DRINKS -> "Drinks"
-            Category.BAKERY -> "Bakery"
-            Category.OTHER -> "Other"
+        val resId = when (category) {
+            Category.FRUITS -> com.example.sharedgroceryapp.R.string.category_fruits
+            Category.DAIRY -> com.example.sharedgroceryapp.R.string.category_dairy
+            Category.MEAT -> com.example.sharedgroceryapp.R.string.category_meat
+            Category.DRINKS -> com.example.sharedgroceryapp.R.string.category_drinks
+            Category.BAKERY -> com.example.sharedgroceryapp.R.string.category_bakery
+            Category.OTHER -> com.example.sharedgroceryapp.R.string.category_other
         }
+        return context.getString(resId)
     }
 }

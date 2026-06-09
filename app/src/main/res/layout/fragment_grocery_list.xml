@@ -15,7 +15,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Smart Grocery List"
+            app:title="@string/smart_grocery_list"
             app:titleTextColor="@color/toolbar_content" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -62,7 +62,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:text="0 items • 0 completed"
+                        tools:text="0 items • 0 completed"
                         android:textColor="?attr/colorOnSurface"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -120,7 +120,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Your list is empty!"
+                android:text="@string/list_empty_title"
                 android:textColor="@color/grovia_text_primary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -130,7 +130,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:gravity="center"
-                android:text="Tap + to add your first item"
+                android:text="@string/list_empty_subtitle"
                 android:textColor="@color/grovia_text_secondary"
                 android:textSize="14sp" />
 
@@ -145,7 +145,7 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="88dp"
-        android:contentDescription="Filter Categories"
+        android:contentDescription="@string/filter_categories_desc"
         android:src="@drawable/ic_filter"
         app:backgroundTint="?attr/colorPrimaryContainer"
         app:tint="?attr/colorPrimary" />
@@ -156,7 +156,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:contentDescription="Add Grocery Item"
+        android:contentDescription="@string/add_grocery_item_desc"
         android:src="@drawable/ic_add"
         app:backgroundTint="?attr/colorPrimary"
         app:tint="#FFFFFF" />
