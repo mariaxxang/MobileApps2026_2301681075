@@ -31,6 +31,7 @@ class AddEditItemFragment : Fragment() {
     private var itemId: Int = -1
     private var isBought: Boolean = false
     private var quantity: Int = 1
+    private var selectedCategory: String = "Other"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,6 +51,8 @@ class AddEditItemFragment : Fragment() {
         val name = args.itemName
         quantity = args.itemQuantity
 
+        setupCategoryGroup()
+
         if (itemId != -1) {
             binding.tvHeaderTitle.text = "Edit Item"
             binding.etItemName.setText(name)
@@ -59,6 +62,60 @@ class AddEditItemFragment : Fragment() {
         }
 
         setupListeners()
+    }
+
+    private fun setupCategoryGroup() {
+        val context = requireContext()
+        val currentCategory = args.itemCategory ?: "Other"
+        selectedCategory = currentCategory
+
+        com.example.sharedgroceryapp.data.local.Category.values().forEach { category ->
+            val chip = com.google.android.material.chip.Chip(context).apply {
+                id = View.generateViewId()
+                text = category.displayName
+                chipIcon = context.getDrawable(category.iconResId)
+                isChipIconVisible = true
+                isCheckable = true
+                tag = category.name
+                chipStrokeWidth = 0f
+                
+                // Rounded corners 20dp
+                shapeAppearanceModel = shapeAppearanceModel.toBuilder()
+                    .setAllCornerSizes(20 * resources.displayMetrics.density)
+                    .build()
+
+                val color = android.graphics.Color.parseColor(category.colorHex)
+                val colorAlpha = android.graphics.Color.parseColor("#33" + category.colorHex.removePrefix("#"))
+
+                val bgStates = arrayOf(
+                    intArrayOf(android.R.attr.state_checked),
+                    intArrayOf(-android.R.attr.state_checked)
+                )
+                val bgColors = intArrayOf(
+                    color,      // checked
+                    colorAlpha  // unchecked
+                )
+                chipBackgroundColor = android.content.res.ColorStateList(bgStates, bgColors)
+
+                val textColors = intArrayOf(
+                    android.graphics.Color.WHITE, // checked
+                    color                        // unchecked
+                )
+                setTextColor(android.content.res.ColorStateList(bgStates, textColors))
+                chipIconTint = android.content.res.ColorStateList(bgStates, textColors)
+                
+                setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        selectedCategory = category.name
+                    }
+                }
+            }
+            binding.chipGroupCategory.addView(chip)
+
+            if (category.name.equals(currentCategory, ignoreCase = true)) {
+                chip.isChecked = true
+            }
+        }
     }
 
     private fun setupListeners() {
@@ -97,12 +154,12 @@ class AddEditItemFragment : Fragment() {
 
         if (itemId == -1) {
             // Add Mode
-            val item = GroceryItem(listId = listId, name = name, quantity = quantity, isBought = false)
+            val item = GroceryItem(listId = listId, name = name, quantity = quantity, isBought = false, category = selectedCategory)
             viewModel.insertItem(item)
             Toast.makeText(requireContext(), "Item added", Toast.LENGTH_SHORT).show()
         } else {
             // Edit Mode
-            val item = GroceryItem(id = itemId, listId = listId, name = name, quantity = quantity, isBought = isBought)
+            val item = GroceryItem(id = itemId, listId = listId, name = name, quantity = quantity, isBought = isBought, category = selectedCategory)
             viewModel.updateItem(item)
             Toast.makeText(requireContext(), "Item updated", Toast.LENGTH_SHORT).show()
         }

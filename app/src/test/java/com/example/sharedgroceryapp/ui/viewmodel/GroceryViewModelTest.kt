@@ -9,6 +9,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -78,5 +79,44 @@ class GroceryViewModelTest {
         val item = GroceryItem(id = 5, listId = 1, name = "Eggs", quantity = 12)
         viewModel.deleteItem(item)
         coVerify(exactly = 1) { repository.deleteItem(item) }
+    }
+
+    @Test
+    fun statisticsState_computesCorrectStatistics() = kotlinx.coroutines.test.runTest(testDispatcher) {
+        val lists = listOf(
+            ShoppingList(id = 1, title = "List 1", createdAt = System.currentTimeMillis()),
+            ShoppingList(id = 2, title = "List 2", createdAt = System.currentTimeMillis())
+        )
+        val items = listOf(
+            GroceryItem(id = 1, listId = 1, name = "Apples", quantity = 5, isBought = true, category = "FRUITS"),
+            GroceryItem(id = 2, listId = 1, name = "Milk", quantity = 1, isBought = false, category = "DAIRY"),
+            GroceryItem(id = 3, listId = 2, name = "Bread", quantity = 2, isBought = false, category = "BAKERY"),
+            GroceryItem(id = 4, listId = 2, name = "Beef", quantity = 1, isBought = true, category = "MEAT")
+        )
+
+        every { repository.allLists } returns flowOf(lists)
+        every { repository.allGroceryItems } returns flowOf(items)
+
+        // Create viewModel again to observe the mocked flows
+        val testViewModel = GroceryViewModel(repository)
+        
+        val states = mutableListOf<StatisticsState>()
+        val collectJob = launch {
+            testViewModel.statisticsState.collect { states.add(it) }
+        }
+        
+        val stats = states.last()
+
+        org.junit.Assert.assertEquals(2, stats.totalListsCount)
+        org.junit.Assert.assertEquals(4, stats.totalItemsCount)
+        org.junit.Assert.assertEquals(2, stats.activeItemsCount)
+        org.junit.Assert.assertEquals(2, stats.completedItemsCount)
+        org.junit.Assert.assertEquals(1, stats.categoryCounts["FRUITS"])
+        org.junit.Assert.assertEquals(1, stats.categoryCounts["DAIRY"])
+        org.junit.Assert.assertEquals(1, stats.categoryCounts["BAKERY"])
+        org.junit.Assert.assertEquals(1, stats.categoryCounts["MEAT"])
+        org.junit.Assert.assertTrue(stats.listsPerMonth.isNotEmpty())
+        
+        collectJob.cancel()
     }
 }

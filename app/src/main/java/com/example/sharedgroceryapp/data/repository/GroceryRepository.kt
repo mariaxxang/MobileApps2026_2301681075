@@ -27,6 +27,10 @@ class GroceryRepository(private val groceryDao: GroceryDao) {
 
     val allGroceryItems: Flow<List<GroceryItem>> = groceryDao.getAllItems()
 
+    fun searchItems(query: String): Flow<List<GroceryItem>> {
+        return groceryDao.searchItems(query)
+    }
+
     // Grocery Item methods
     fun getItemsForList(listId: Int): Flow<List<GroceryItem>> {
         return groceryDao.getItemsForList(listId)
@@ -42,5 +46,9 @@ class GroceryRepository(private val groceryDao: GroceryDao) {
 
     suspend fun deleteItem(item: GroceryItem) = withContext(Dispatchers.IO) {
         groceryDao.deleteItem(item)
+    }
+
+    suspend fun deleteCompletedItemsForList(listId: Int) = withContext(Dispatchers.IO) {
+        groceryDao.deleteCompletedItemsForList(listId)
     }
 }

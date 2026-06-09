@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sharedgroceryapp.GroceryApplication
 import com.example.sharedgroceryapp.R
+import com.example.sharedgroceryapp.data.local.Category
 import com.example.sharedgroceryapp.data.local.GroceryItem
 import com.example.sharedgroceryapp.databinding.FragmentGroceryListBinding
 import com.example.sharedgroceryapp.databinding.ItemGroceryBinding
@@ -42,6 +44,11 @@ class GroceryListFragment : Fragment() {
     private var currentList: List<GroceryItem> = emptyList()
     private var listId: Int = -1
     private var listTitle: String = "Shopping List"
+
+    sealed class ListItem {
+        data class Header(val category: Category, val count: Int) : ListItem()
+        data class Item(val groceryItem: GroceryItem) : ListItem()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,7 +82,8 @@ class GroceryListFragment : Fragment() {
                     itemId = item.id,
                     itemBought = item.isBought,
                     itemName = item.name,
-                    itemQuantity = item.quantity
+                    itemQuantity = item.quantity,
+                    itemCategory = item.category
                 )
                 findNavController().navigate(action)
             },
@@ -127,19 +135,111 @@ class GroceryListFragment : Fragment() {
             )
             findNavController().navigate(action)
         }
+
+        binding.fabFilter.setOnClickListener {
+            showFilterBottomSheet()
+        }
+    }
+
+    private fun showFilterBottomSheet() {
+        val dialog = com.google.android.material.bottomsheet.BottomSheetDialog(requireContext())
+        val dialogBinding = com.example.sharedgroceryapp.databinding.DialogFilterCategoriesBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+
+        val currentSelected = viewModel.selectedCategories.value.toMutableSet()
+
+        // Populate chips
+        Category.values().forEach { category ->
+            val chip = com.google.android.material.chip.Chip(requireContext()).apply {
+                id = View.generateViewId()
+                text = category.displayName
+                chipIcon = requireContext().getDrawable(category.iconResId)
+                isChipIconVisible = true
+                isCheckable = true
+                isChecked = currentSelected.contains(category.name)
+                tag = category.name
+                chipStrokeWidth = 0f
+                
+                shapeAppearanceModel = shapeAppearanceModel.toBuilder()
+                    .setAllCornerSizes(20 * resources.displayMetrics.density)
+                    .build()
+
+                val color = android.graphics.Color.parseColor(category.colorHex)
+                val colorAlpha = android.graphics.Color.parseColor("#33" + category.colorHex.removePrefix("#"))
+
+                val bgStates = arrayOf(
+                    intArrayOf(android.R.attr.state_checked),
+                    intArrayOf(-android.R.attr.state_checked)
+                )
+                val bgColors = intArrayOf(
+                    color,      // checked
+                    colorAlpha  // unchecked
+                )
+                chipBackgroundColor = android.content.res.ColorStateList(bgStates, bgColors)
+
+                val textColors = intArrayOf(
+                    android.graphics.Color.WHITE, // checked
+                    color                        // unchecked
+                )
+                setTextColor(android.content.res.ColorStateList(bgStates, textColors))
+                chipIconTint = android.content.res.ColorStateList(bgStates, textColors)
+
+                setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        currentSelected.add(category.name)
+                    } else {
+                        currentSelected.remove(category.name)
+                    }
+                    viewModel.setSelectedCategories(currentSelected)
+                }
+            }
+            dialogBinding.chipGroupFilter.addView(chip)
+        }
+
+        dialogBinding.btnShowAll.setOnClickListener {
+            viewModel.setSelectedCategories(emptySet())
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
     private fun observeViewModel() {
+        // Collect full items for stats and QR share
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.getItemsForList(listId).collect { items ->
-                    val sortedItems = GroceryListUtils.sortItems(items)
-                    currentList = sortedItems
-                    adapter.submitList(sortedItems)
+                    currentList = items
+                    updateStats(items)
+                }
+            }
+        }
+
+        // Collect filtered items for adapter list display
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.getFilteredItemsForList(listId).collect { items ->
+                    // Group and map to ListItems
+                    val grouped = items.groupBy { Category.fromString(it.category) }
+                    val displayList = mutableListOf<ListItem>()
                     
-                    updateStats(sortedItems)
+                    Category.values().forEach { category ->
+                        val categoryItems = grouped[category]
+                        if (!categoryItems.isNullOrEmpty()) {
+                            val sortedCategoryItems = categoryItems.sortedWith(
+                                compareBy<GroceryItem> { it.isBought }
+                                    .thenByDescending { it.id }
+                            )
+                            displayList.add(ListItem.Header(category, sortedCategoryItems.size))
+                            sortedCategoryItems.forEach { item ->
+                                displayList.add(ListItem.Item(item))
+                            }
+                        }
+                    }
                     
-                    if (sortedItems.isEmpty()) {
+                    adapter.submitList(displayList)
+                    
+                    if (items.isEmpty()) {
                         binding.rvGroceryList.visibility = View.GONE
                         binding.layoutEmptyState.visibility = View.VISIBLE
                     } else {
@@ -170,29 +270,69 @@ class GroceryListFragment : Fragment() {
         private val onItemChecked: (GroceryItem, Boolean) -> Unit,
         private val onItemEdit: (GroceryItem) -> Unit,
         private val onItemDelete: (GroceryItem) -> Unit
-    ) : RecyclerView.Adapter<GroceryAdapter.GroceryViewHolder>() {
+    ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-        private var items: List<GroceryItem> = emptyList()
+        private var items: List<ListItem> = emptyList()
 
-        fun submitList(newItems: List<GroceryItem>) {
+        companion object {
+            private const val TYPE_HEADER = 0
+            private const val TYPE_ITEM = 1
+        }
+
+        fun submitList(newItems: List<ListItem>) {
             items = newItems
             notifyDataSetChanged()
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroceryViewHolder {
-            val binding = ItemGroceryBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-            return GroceryViewHolder(binding)
+        override fun getItemViewType(position: Int): Int {
+            return when (items[position]) {
+                is ListItem.Header -> TYPE_HEADER
+                is ListItem.Item -> TYPE_ITEM
+            }
         }
 
-        override fun onBindViewHolder(holder: GroceryViewHolder, position: Int) {
-            holder.bind(items[position])
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+            return if (viewType == TYPE_HEADER) {
+                val binding = com.example.sharedgroceryapp.databinding.ItemCategoryHeaderBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                HeaderViewHolder(binding)
+            } else {
+                val binding = ItemGroceryBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                GroceryViewHolder(binding)
+            }
+        }
+
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            when (val item = items[position]) {
+                is ListItem.Header -> (holder as HeaderViewHolder).bind(item)
+                is ListItem.Item -> (holder as GroceryViewHolder).bind(item.groceryItem)
+            }
         }
 
         override fun getItemCount(): Int = items.size
+
+        inner class HeaderViewHolder(private val binding: com.example.sharedgroceryapp.databinding.ItemCategoryHeaderBinding) :
+            RecyclerView.ViewHolder(binding.root) {
+
+            fun bind(header: ListItem.Header) {
+                val category = header.category
+                binding.tvHeaderName.text = category.displayName.uppercase()
+                binding.ivHeaderIcon.setImageResource(category.iconResId)
+                binding.tvHeaderCount.text = header.count.toString()
+
+                val color = android.graphics.Color.parseColor(category.colorHex)
+                binding.tvHeaderName.setTextColor(color)
+                binding.ivHeaderIcon.imageTintList = android.content.res.ColorStateList.valueOf(color)
+                binding.tvHeaderCount.backgroundTintList = android.content.res.ColorStateList.valueOf(color)
+            }
+        }
 
         inner class GroceryViewHolder(private val binding: ItemGroceryBinding) :
             RecyclerView.ViewHolder(binding.root) {
@@ -209,7 +349,6 @@ class GroceryListFragment : Fragment() {
                     binding.viewStatusStrip.setBackgroundColor(binding.root.context.getColor(R.color.grovia_primary))
                 }
                 
-                // Remove existing listener before setting checked status to avoid trigger recursion
                 binding.checkboxBought.setOnCheckedChangeListener(null)
                 binding.checkboxBought.isChecked = item.isBought
 

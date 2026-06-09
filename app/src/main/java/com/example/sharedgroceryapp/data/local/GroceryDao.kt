@@ -24,6 +24,9 @@ interface GroceryDao {
     @Query("SELECT * FROM grocery_items")
     fun getAllItems(): Flow<List<GroceryItem>>
 
+    @Query("SELECT * FROM grocery_items WHERE name LIKE '%' || :query || '%'")
+    fun searchItems(query: String): Flow<List<GroceryItem>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertItem(item: GroceryItem): Long
 
@@ -32,4 +35,7 @@ interface GroceryDao {
 
     @Delete
     fun deleteItem(item: GroceryItem): Int
+
+    @Query("DELETE FROM grocery_items WHERE listId = :listId AND isBought = 1")
+    fun deleteCompletedItemsForList(listId: Int): Int
 }

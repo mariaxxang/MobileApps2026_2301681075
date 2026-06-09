@@ -23,5 +23,6 @@ data class GroceryItem(
     val listId: Int,
     val name: String,
     val quantity: Int,
-    val isBought: Boolean = false
+    val isBought: Boolean = false,
+    val category: String = "Other"
 )

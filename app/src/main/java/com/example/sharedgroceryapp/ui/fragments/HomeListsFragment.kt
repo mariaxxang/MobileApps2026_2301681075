@@ -61,7 +61,7 @@ class HomeListsFragment : Fragment() {
     private fun setupRecyclerView() {
         adapter = ShoppingListAdapter(
             onListClick = { list ->
-                val action = HomeListsFragmentDirections.actionHomeListsFragmentToGroceryListFragment(list.id, list.title)
+                val action = HomeListsFragmentDirections.actionHomeListsFragmentToListDetailFragment(list.id.toLong(), list.title)
                 findNavController().navigate(action)
             },
             onListDelete = { list ->
